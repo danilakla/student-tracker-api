@@ -3,10 +3,11 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { AuthDto } from './dto';
+import { AuthDto, UserDto } from './dto';
 import * as argon from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { CryptoService } from 'src/crypto/crypto.service';
 
 @Injectable()
 export class AuthService {
@@ -14,18 +15,26 @@ export class AuthService {
     private prisma: PrismaService,
     private jwt: JwtService,
     private config: ConfigService,
+    private crypto: CryptoService,
   ) {}
 
-  async signup(dto: AuthDto) {
-    // generate the password hash
+  async signup(dto: UserDto) {
+
+    let val = await this.crypto.encryptString('teacher+univercity');
+    console.log(val);
+    let va1 =await  this.crypto.decryptString(val);
+    console.log(va1);
+    
+    
     const hash = await argon.hash(dto.password);
-    // save the new user in the db
     try {
       const user = await this.prisma.user.create({
         data: {
           email: dto.email,
           hash,
-          role:dto.role
+          role:dto.role,
+          lastName:dto.lastName,
+          firstName:dto.firstName,
         },
       });
 
@@ -63,6 +72,8 @@ export class AuthService {
     return this.signToken(user.id, user.email, user.role);
   }
 
+  
+
   async signToken(
     userId: number,
     email: string,
@@ -87,4 +98,6 @@ export class AuthService {
       access_token: token,
     };
   }
+
+
 }
