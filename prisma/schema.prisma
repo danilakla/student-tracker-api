@@ -21,7 +21,7 @@ model User {
   firstName String?
   lastName  String?
   university University?
-
+  role String
   subjects Subject[]
   TeacherUserSubject TeacherUserSubject[] 
   @@map("user")
