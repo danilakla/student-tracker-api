@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  email String @unique
+  hash  String
+  firstName String?
+  lastName  String?
+  university University?
+
+  subjects Subject[]
+  TeacherUserSubject TeacherUserSubject[] 
+  @@map("user")
+}
+
+model Student {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  email String @unique
+  hash  String
+  firstName String?
+  lastName  String?
+  studentNumber String?
+  teacherSubjects TeacherUserSubject[] 
+  @@map("student")
+}
+
+
+model University {
+  id        Int      @id @default(autoincrement())
+
+  name        String
+
+  userId Int  @unique
+  user   User    @relation(fields: [userId], references: [id])
+  @@map("universitys")
+}
+
+
+model Subject {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  subject_name String
+  course String
+  term String
+  numberOfStudent Int
+  numberPassLecture Int
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+  teacherUserSubject TeacherUserSubject[] 
+
+  @@map("subjects")
+}
+
+model TeacherUserSubject {
+  id                Int        @id @default(autoincrement())
+  studentId         Int
+  subjectId         Int
+  attendanceCount   Int        
+  reviewStatus      Boolean        
+  teacherId         Int
+  student           Student       @relation(fields: [studentId], references: [id])
+  subject           Subject    @relation(fields: [subjectId], references: [id])
+  teacher           User    @relation(fields: [teacherId], references: [id])
+
+  @@map("user_subjects")
+}
+
+
