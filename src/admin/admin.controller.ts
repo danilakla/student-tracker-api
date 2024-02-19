@@ -37,4 +37,11 @@ export class AdminController {
     ) {
       return await this.adminService.deleteUniversity( userId);
     }
+
+    @Post("create-teacher-token")
+    async createTeacherToken(
+        @GetUser('id') userId: number
+        ){
+        return await this.adminService.encryptTeacherToken(userId);
+    }
 }

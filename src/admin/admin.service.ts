@@ -9,16 +9,14 @@ export class AdminService {
         private univerService: UniverService){}
     
 
-   async  encryptTeacherToken():Promise<string> {
-   
-    return await this.cryptoService.encryptString("teacher+univer"); ;
+   async  encryptTeacherToken(id:number):Promise<string> {
+    
+    
+    const univerName =await  this.univerService.getUniverByUserId(id);
+    return await this.cryptoService.encryptString(univerName.university.name) ;
    }
 
-   
-   async  decryptTeacherToken(token:string):Promise<string> {
-   
-    return await this.cryptoService.decryptString(token); ;
-   }
+
 
    async createUniversity(univerName: string, id: number){
     try {
