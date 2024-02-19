@@ -34,20 +34,30 @@ export class UniverService {
       throw new BadRequestException();
     }
   }
+  async getUniverByUserId(userId:number){
+    try {
 
+        const univerdata = await this.prisma.user.findFirst({
+            where: { id:userId },
+            select: {
+              university: {
+                select: {
+                  name: true,
+                  id: true,
+                },
+              },
+            },
+          });
+          return univerdata;
+    } catch (error) {
+        throw error;
+    }
+
+  }
   async deleteUniversity( userId: number) {
     try {
-    const univerdata = await this.prisma.user.findFirst({
-        where: { id:userId },
-        select: {
-          university: {
-            select: {
-              name: true,
-              id: true,
-            },
-          },
-        },
-      });
+    const univerdata =await  this.getUniverByUserId(userId);
+
     if (!(await this.isExist(univerdata.university.name))) throw new BadRequestException();
    
      const data= await this.prisma.university.delete({where:{id:univerdata.university.id}})
@@ -61,17 +71,8 @@ export class UniverService {
   async updateUniversityName(updatedUniverName: string, id: number) {
     try {
 
-    const univerdata = await this.prisma.user.findFirst({
-      where: { id },
-      select: {
-        university: {
-          select: {
-            name: true,
-            id: true,
-          },
-        },
-      },
-    });
+        const univerdata =await  this.getUniverByUserId(id);
+
 
     if (!(await this.isExist(univerdata.university.name)))
       throw new BadRequestException();
