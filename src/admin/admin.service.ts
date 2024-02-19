@@ -13,7 +13,7 @@ export class AdminService {
     
     
     const univerName =await  this.univerService.getUniverByUserId(id);
-    return await this.cryptoService.encryptString(univerName.university.name) ;
+    return await this.cryptoService.encryptString(id+"$"+univerName.university.name) ;
    }
 
 

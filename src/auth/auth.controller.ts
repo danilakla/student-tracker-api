@@ -15,6 +15,7 @@ export class AuthController {
 
   @Post('signup')
   signup(@Body() dto: UserDto) {
+  
     return this.authService.signup(dto);
   }
 
@@ -22,5 +23,16 @@ export class AuthController {
   @Post('signin')
   signin(@Body() dto: AuthDto) {
     return this.authService.signin(dto);
+  }
+
+  @Post('signup-teacher')
+  signupteacher(@Body() dto: UserDto) {
+    return this.authService.signupteacher(dto);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('signin-teacher')
+  signinteacher(@Body() dto: AuthDto) {
+    return this.authService.signinteacher(dto);
   }
 }

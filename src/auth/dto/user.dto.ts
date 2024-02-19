@@ -1,6 +1,7 @@
 import {
     IsEmail,
     IsNotEmpty,
+    IsOptional,
     IsString,
   } from 'class-validator';
   
@@ -24,6 +25,7 @@ import {
 
     lastName: string;
 
+    @IsOptional()
     teacherSecretKey: string;
   }
   

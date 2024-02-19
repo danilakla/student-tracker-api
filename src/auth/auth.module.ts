@@ -6,7 +6,7 @@ import { JwtStrategy } from './strategy';
 import { CryptoModule } from 'src/crypto/crypto.module';
 
 @Module({
-  imports: [JwtModule.register({})],
+  imports: [JwtModule.register({}), CryptoModule],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
 })

@@ -11,6 +11,21 @@ datasource db {
 }
 
 
+model Teacher {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  email String @unique
+  hash  String
+  firstName String?
+  lastName  String?
+  subjects Subject[]
+  TeacherUserSubject TeacherUserSubject[] 
+  userId Int
+  user   User    @relation(fields: [userId], references: [id])
+
+  @@map("teacher")
+}
 
 model User {
   id        Int      @id @default(autoincrement())
@@ -20,10 +35,8 @@ model User {
   hash  String
   firstName String?
   lastName  String?
+  teachers Teacher[] 
   university University?
-  role String
-  subjects Subject[]
-  TeacherUserSubject TeacherUserSubject[] 
   @@map("user")
 }
 
@@ -60,8 +73,8 @@ model Subject {
   term String
   numberOfStudent Int
   numberPassLecture Int
-  userId Int
-  user   User @relation(fields: [userId], references: [id])
+  teacherId Int
+  teacher   Teacher @relation(fields: [teacherId], references: [id])
   teacherUserSubject TeacherUserSubject[] 
 
   @@map("subjects")
@@ -76,7 +89,7 @@ model TeacherUserSubject {
   teacherId         Int
   student           Student       @relation(fields: [studentId], references: [id])
   subject           Subject    @relation(fields: [subjectId], references: [id])
-  teacher           User    @relation(fields: [teacherId], references: [id])
+  teacher           Teacher    @relation(fields: [teacherId], references: [id])
 
   @@map("user_subjects")
 }
