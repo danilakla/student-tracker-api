@@ -7,23 +7,17 @@ import { AuthDto, UserDto } from './dto';
 import * as argon from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { CryptoService } from 'src/crypto/crypto.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private prisma: PrismaService,
     private jwt: JwtService,
-    private config: ConfigService,
-    private crypto: CryptoService,
+    private config: ConfigService
   ) {}
 
   async signup(dto: UserDto) {
 
-    let val = await this.crypto.encryptString('teacher+univercity');
-    console.log(val);
-    let va1 =await  this.crypto.decryptString(val);
-    console.log(va1);
     
     
     const hash = await argon.hash(dto.password);
@@ -89,7 +83,7 @@ export class AuthService {
     const token = await this.jwt.signAsync(
       payload,
       {
-        expiresIn: '15m',
+        expiresIn: '15000m',
         secret: secret,
       },
     );
