@@ -14,7 +14,6 @@ export class CryptoService {
         }
      public async encryptString (value: string): Promise<string>{
         
-            console.log(this.config.get('sec_key'));
             
         const key = (await promisify(scrypt)( this.config.get('sec_key'), 'salt', 32)) as Buffer;
         const cipher = createCipheriv('aes-256-ctr', key, this.iv);

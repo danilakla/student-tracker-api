@@ -11,6 +11,7 @@ import {
       const request: any = ctx
         .switchToHttp()
         .getRequest();
+        
       if (data) {
         return request.user[data];
       }

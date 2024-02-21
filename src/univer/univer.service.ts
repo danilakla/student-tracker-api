@@ -16,7 +16,6 @@ export class UniverService {
         return true;
       }
     } catch (error) {
-      console.log(error);
       throw error;
     }
   }

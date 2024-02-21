@@ -47,7 +47,7 @@ export class TeacherService {
    }
 
    
-   async geManySubjects(subjectId: number, teacherId: number){
+   async getManySubjects( teacherId: number){
     try {
        return await this.subjectSerivce.getSubjects( teacherId);
         
