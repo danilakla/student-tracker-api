@@ -6,18 +6,23 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class SubjectService {
   constructor(private prisma: PrismaService) {}
 
-  async addSuject(
-    subjectDto: SubjectDto,
-    id: number,
-  ) {
+  async getSubjects(teacherId) {
+    try {
+        const subjects = this.prisma.subject.findMany({where:{teacherId:teacherId}})  
+        return subjects;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async addSuject(subjectDto: SubjectDto, id: number) {
     try {
       const subject = await this.prisma.subject.create({
         data: {
           subject_name: subjectDto.subjectName,
-          term:subjectDto.term,
+          term: subjectDto.term,
           numberOfStudent: subjectDto.numberOfStudent,
           numberPassLecture: subjectDto.numberPassLecture,
-          course:subjectDto.course,
+          course: subjectDto.course,
           teacher: { connect: { id } },
         },
       });
@@ -26,13 +31,11 @@ export class SubjectService {
       throw new BadRequestException();
     }
   }
-  async getSubjectsByTeacherId(teacherId: number) {
+  async getSubjectByTeacherSubjectId(subjectid:number, teacherId: number) {
     try {
-      const subjects = await this.prisma.teacher.findFirst({
-        where: { id: teacherId },
-        include: {
-          subjects: true,
-        },
+      const subjects = await this.prisma.subject.findFirst({
+        where: { id:subjectid, teacherId:teacherId  },
+      
       });
       return subjects;
     } catch (error) {
@@ -66,20 +69,20 @@ export class SubjectService {
     }
   }
 
-  async updateUniversityName(
+  async updateSubject(
     subjectDto: SubjectDto,
-    
+
     teacherId: number,
   ) {
     try {
       const updateSubject = await this.prisma.subject.update({
-        where: { id:subjectDto.subjectId, teacherId: teacherId },
+        where: { id: subjectDto.subjectId, teacherId: teacherId },
         data: {
           subject_name: subjectDto.subjectName,
           term: subjectDto.term,
           numberOfStudent: subjectDto.numberOfStudent,
           numberPassLecture: subjectDto.numberPassLecture,
-          course:subjectDto.course,
+          course: subjectDto.course,
         },
       });
       return updateSubject;
