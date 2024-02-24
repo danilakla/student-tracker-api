@@ -27,5 +27,8 @@ import {
 
     @IsOptional()
     teacherSecretKey: string;
+
+    @IsOptional()
+    studentNumber: string;
   }
   

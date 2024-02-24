@@ -34,7 +34,7 @@ export class SubjectService {
   async getSubjectByTeacherSubjectId(subjectid:number, teacherId: number) {
     try {
       const subjects = await this.prisma.subject.findFirst({
-        where: { id:subjectid, teacherId:teacherId  },
+        where: { id:+subjectid, teacherId:teacherId  },
       
       });
       return subjects;

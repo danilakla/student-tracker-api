@@ -35,4 +35,15 @@ export class AuthController {
   signinteacher(@Body() dto: AuthDto) {
     return this.authService.signinteacher(dto);
   }
+
+  @Post('signup-student')
+  signupStudent(@Body() dto: UserDto) {
+    return this.authService.signupStudent(dto);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('signin-student')
+  signinStudent(@Body() dto: AuthDto) {
+    return this.authService.signinStudent(dto);
+  }
 }

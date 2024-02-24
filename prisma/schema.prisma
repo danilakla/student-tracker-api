@@ -20,7 +20,6 @@ model Teacher {
   firstName String?
   lastName  String?
   subjects Subject[]
-  TeacherUserSubject TeacherUserSubject[] 
   userId Int
   user   User    @relation(fields: [userId], references: [id])
 
@@ -49,7 +48,7 @@ model Student {
   firstName String?
   lastName  String?
   studentNumber String?
-  teacherSubjects TeacherUserSubject[] 
+  teacherSubjects StudentSubject[] 
   @@map("student")
 }
 
@@ -75,23 +74,20 @@ model Subject {
   numberPassLecture Int
   teacherId Int
   teacher   Teacher @relation(fields: [teacherId], references: [id])
-  teacherUserSubject TeacherUserSubject[] 
+  teacherUserSubject StudentSubject[] 
 
   @@map("subjects")
 }
-
-model TeacherUserSubject {
-  id                Int        @id @default(autoincrement())
+model StudentSubject {
   studentId         Int
   subjectId         Int
   attendanceCount   Int        
   reviewStatus      Boolean        
-  teacherId         Int
+  lastTimeScan      String        
   student           Student       @relation(fields: [studentId], references: [id])
-  subject           Subject    @relation(fields: [subjectId], references: [id])
-  teacher           Teacher    @relation(fields: [teacherId], references: [id])
+  subject           Subject       @relation(fields: [subjectId], references: [id])
 
+  @@id([studentId, subjectId])
   @@map("user_subjects")
 }
-
 

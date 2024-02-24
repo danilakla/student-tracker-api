@@ -17,6 +17,29 @@ export class AuthService {
     private config: ConfigService,
     private cryptoService: CryptoService
   ) {}
+  async signupStudent(dto: UserDto) {
+
+    
+    
+    const hash = await argon.hash(dto.password);
+    try {
+      const user = await this.prisma.student.create({
+        data: {
+          email: dto.email,
+          hash,
+          lastName:dto.lastName,
+          firstName:dto.firstName,
+          studentNumber:dto.studentNumber
+        },
+      });
+
+      return this.signToken(user.id, user.email, "STUDENT");
+    } catch (error) {
+  
+      throw error;
+    }
+  }
+
 
   async signup(dto: UserDto) {
 
@@ -38,6 +61,33 @@ export class AuthService {
   
       throw error;
     }
+  }
+
+  async signinStudent(dto: AuthDto) {
+    // find the user by email
+    const user =
+      await this.prisma.student.findUnique({
+        where: {
+          email: dto.email,
+        }
+      });
+    // if user does not exist throw exception
+    if (!user)
+      throw new ForbiddenException(
+        'Credentials incorrect',
+      );
+
+    // compare password
+    const pwMatches = await argon.verify(
+      user.hash,
+      dto.password,
+    );
+    // if password incorrect throw exception
+    if (!pwMatches)
+      throw new ForbiddenException(
+        'Credentials incorrect',
+      );
+    return this.signToken(user.id, user.email, "STUDENT");
   }
 
   async signin(dto: AuthDto) {
@@ -66,6 +116,8 @@ export class AuthService {
       );
     return this.signToken(user.id, user.email, "ADMIN");
   }
+
+
 
 
   async signupteacher(dto: UserDto) {
