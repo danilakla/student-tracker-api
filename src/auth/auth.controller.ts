@@ -1,13 +1,19 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserDto, AuthDto } from './dto';
+import { GetUser } from './decorator/get-user.decorator';
+import { userInfo } from 'os';
+import { AuthGuard } from '@nestjs/passport';
+import { JwtGuard } from './guard';
 
 @Controller('auth')
 export class AuthController {
@@ -22,6 +28,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('signin')
   signin(@Body() dto: AuthDto) {
+      
     return this.authService.signin(dto);
   }
 
@@ -45,5 +52,11 @@ export class AuthController {
   @Post('signin-student')
   signinStudent(@Body() dto: AuthDto) {
     return this.authService.signinStudent(dto);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('user-credential')
+  getUserInfo(): any{
+    return "userInfo"
   }
 }

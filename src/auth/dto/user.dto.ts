@@ -19,9 +19,11 @@ import {
     @IsNotEmpty()
     role: string;
 
+    @IsOptional()
 
     firstName: string;
 
+    @IsOptional()
 
     lastName: string;
 
