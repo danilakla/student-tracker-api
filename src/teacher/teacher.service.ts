@@ -15,7 +15,6 @@ export class TeacherService {
       if(subject==null) throw new BadRequestException()
       const timeNow= new Date();
       const secDataString= subject.id+"$"+timeNow.toString()+"$"+liveTimeInSecond;
-      console.log(secDataString);
       
       const encryptedData = this.cryptoService.encryptString(secDataString);
       return encryptedData;

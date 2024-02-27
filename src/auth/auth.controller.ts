@@ -16,6 +16,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { JwtGuard } from './guard';
 
 @Controller('auth')
+
 export class AuthController {
   constructor(private authService: AuthService) {}
 
@@ -55,8 +56,12 @@ export class AuthController {
   }
 
   @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtGuard)
+
   @Get('user-credential')
-  getUserInfo(): any{
-    return "userInfo"
+  getUserInfo(
+    @GetUser() user
+  ): any{
+    return user
   }
 }

@@ -18,6 +18,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 
   async validate(payload: { sub: number; email: string; role: string }) {
     let user;
+    
     if (payload.role == 'ADMIN') {
      user= await this.prisma.user.findUnique({
         where: {
@@ -38,6 +39,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       });
     }
     
+    user.role=payload.role
 
     delete user.hash;
     return user;

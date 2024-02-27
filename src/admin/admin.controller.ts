@@ -42,6 +42,6 @@ export class AdminController {
     async createTeacherToken(
         @GetUser('id') userId: number
         ){
-        return await this.adminService.encryptTeacherToken(userId);
+        return {key:await this.adminService.encryptTeacherToken(userId)};
     }
 }
