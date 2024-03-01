@@ -18,13 +18,23 @@ export class StudentService {
         return dataStr;
    }
    async hasScanRecently(subjectId:number, studentId:number, timeNow:Date){
+    try {
+        
     const data= await this.prisma.studentSubject.findUnique({where:{
        studentId_subjectId:{
-        studentId:studentId,
-        subjectId:subjectId
+        studentId:+studentId,
+        subjectId:+subjectId
        }
-    }})
-    if(data==null){
+    }}).catch();
+    if(data==null)
+    {   
+        await this.prisma.studentSubject.create({data:{
+            studentId:studentId,
+            subjectId:+subjectId,
+            attendanceCount: 0,
+            reviewStatus: false,
+            lastTimeScan:new Date('0000-01-01').toString()
+        }})
         return false
     }
     const lastTimdeScan= new Date(data.lastTimeScan);
@@ -36,6 +46,9 @@ export class StudentService {
         return false;
     }
 
+} catch (error) {
+ return false;       
+}
    }
    async valiedUserAtten(studentPayloadForAttend:UserAttendDto, studentId:number){
     const [subjectId, time, liveTime] = await this.decodeCodeForSubject(studentPayloadForAttend.code);
@@ -43,7 +56,7 @@ export class StudentService {
     const nowTime= new Date(studentPayloadForAttend.time);
     if((await this.hasScanRecently(+subjectId, studentId, nowTime))){
         return {
-            code:3
+            code:"you scan already"
         }
     }
     if (this.isValidTimeForStudent(pastTime, nowTime, +liveTime))    {
@@ -71,11 +84,12 @@ export class StudentService {
                 lastTimeScan:nowTime.toString()
             }
         });
-        return {data, code:1};
+        return {data, code:"success"};
     }else{
         return {
             subjectId,
-            code:2
+            code:"not inf time",
+            status:400
         }
     }
    }

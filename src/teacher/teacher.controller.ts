@@ -91,8 +91,6 @@ export class TeacherController {
       @GetUser('id') teacherId: number,
       @Body() dto: StudentReviewDto,
     ) {
-
-
       return await this.teacherService.reviewStudent(dto, teacherId);
     }
 
