@@ -9,13 +9,14 @@ import { UniverModule } from './univer/univer.module';
 import { SubjectModule } from './subject/subject.module';
 import { TeacherModule } from './teacher/teacher.module';
 import { StudentModule } from './student/student.module';
+import { QuizeModule } from './quize/quize.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    PrismaModule, AuthModule,  AdminModule, SubjectModule, TeacherModule, StudentModule],
+    PrismaModule, AuthModule,  AdminModule, SubjectModule, TeacherModule, StudentModule, QuizeModule],
 
 })
 export class AppModule {}

@@ -20,6 +20,7 @@ model Teacher {
   firstName String?
   lastName  String?
   subjects Subject[]
+  quizeForums QuizeForm[]
   userId Int
   user   User    @relation(fields: [userId], references: [id])
 
@@ -90,4 +91,15 @@ model StudentSubject {
   @@id([studentId, subjectId])
   @@map("user_subjects")
 }
+
+
+model QuizeForm {
+  id    Int   @id @default(autoincrement())
+  name String
+  form  Json?
+  teacherId Int
+  teacher   Teacher @relation(fields: [teacherId], references: [id])
+  @@map("quize_form")
+}
+
 
