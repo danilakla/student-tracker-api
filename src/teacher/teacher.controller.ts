@@ -85,6 +85,24 @@ export class TeacherController {
       return await this.teacherService.getReviewStudent(teacherrId, +params.subjectId);
     }
 
+    @Get("student-by-subj/:subjectId")
+    async getStudentBySubj(
+      @GetUser('id') teacherrId: number,
+      @Param() params: any,
+
+    ) {
+      return await this.teacherService.getStudentBySubjectIdAttendence(+params.subjectId);
+    }
+
+    @Get("amount-student-attend/:subjectId")
+    async getAmountStudentAttend(
+      @GetUser('id') teacherrId: number,
+      @Param() params: any,
+
+    ) {
+      return await this.teacherService.getAmountStudentAttend(+params.subjectId);
+    }
+
 
     @Post("review-acception-student")
     async acceptuinStudent(

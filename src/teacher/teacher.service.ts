@@ -58,6 +58,29 @@ export class TeacherService {
          return data;
       }
    }
+   async getStudentBySubjectIdAttendence(subjectId:number){
+      const student = await this.prisma.studentSubject.findMany({where:{
+         subjectId
+      },
+   select:{
+      attendanceCount:true,
+      student:true
+   }})
+
+   return student;
+   }
+   async getAmountStudentAttend(subjectId:number){
+      const attendanceCount = await this.prisma.studentSubject.aggregate({where:{
+         subjectId
+      },
+      _sum:{
+         attendanceCount:true
+      }
+   })
+
+   return {count:attendanceCount._sum};
+   }
+   
    async getSubjectWithReviewStudent(teacherId: number){
       const datas= await  this.prisma.studentSubject.findMany(
          {where:{
@@ -72,8 +95,15 @@ export class TeacherService {
          }
       }
       )
+      const subjs= await this.prisma.subject.findMany({
+         where:{
+            id:{
+               in:datas.map(e=>e.subject.id)
+            }
+         }
+      })
 
-      return datas;
+      return subjs;
    }
 
    async getReviewStudent(teacherId: number, subjectId:number){
