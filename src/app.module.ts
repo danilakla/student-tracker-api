@@ -10,6 +10,7 @@ import { SubjectModule } from './subject/subject.module';
 import { TeacherModule } from './teacher/teacher.module';
 import { StudentModule } from './student/student.module';
 import { QuizeModule } from './quize/quize.module';
+import { CounterGateway } from './counter/counter.gateway';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { QuizeModule } from './quize/quize.module';
       isGlobal: true,
     }),
     PrismaModule, AuthModule,  AdminModule, SubjectModule, TeacherModule, StudentModule, QuizeModule],
+  providers: [CounterGateway],
 
 })
 export class AppModule {}
