@@ -10,6 +10,10 @@ export class QuizeService {
 
     public async  saveQuizeForm( quize:QuizeForm, teacherId:number){
     try {
+        const isExist =await this.prisma.quizeForm.findFirst({where:{name:quize.name}})
+        console.log(isExist);
+        
+        if(isExist)throw new Error("exist")
         const data = this.prisma.quizeForm.create({data:{
             form:quize.formtest,
             name:quize.name,
@@ -19,7 +23,7 @@ export class QuizeService {
         }})
         return data;
     } catch (error) {
-        
+        throw error
     }
     }
 
