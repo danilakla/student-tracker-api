@@ -1,15 +1,24 @@
 import { AdminService } from './admin.service';
-import { Body, Controller, Delete, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Put, UseGuards } from '@nestjs/common';
 import { GetUser } from 'src/auth/decorator/get-user.decorator';
 import { JwtGuard } from 'src/auth/guard';
 import { CreateUniverDto } from 'src/univer/dto/create-univer.dto';
 import { UpdateUniverDto } from 'src/univer/dto/update-univer.dto';
+import { UniverService } from 'src/univer/univer.service';
 @UseGuards(JwtGuard)
 @Controller('admin')
 export class AdminController {
 
 
-    constructor(private adminService:AdminService){}
+    constructor(private adminService:AdminService, private univerService: UniverService){}
+
+    @Get("get-univer")
+    async getUniver(
+      @GetUser('id') userId: number,
+    ) {
+
+      return await this.univerService.getUniverByUserId(userId);
+    }
 
     @Post("create-univer")
     async createUniver(
@@ -35,7 +44,7 @@ export class AdminController {
     async deleteUniver(
       @GetUser('id') userId: number
     ) {
-      return await this.adminService.deleteUniversity( userId);
+      return await this.adminService.deleteUniversity(userId);
     }
 
     @Post("create-teacher-token")

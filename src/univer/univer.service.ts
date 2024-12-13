@@ -69,6 +69,7 @@ export class UniverService {
 
   async updateUniversityName(updatedUniverName: string, id: number) {
     try {
+      if (await this.isExist(updatedUniverName)) throw new BadRequestException();
 
         const univerdata =await  this.getUniverByUserId(id);
 
