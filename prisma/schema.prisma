@@ -1,0 +1,102 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Teacher {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  email     String   @unique
+  hash      String
+  firstName String?
+  lastName  String?
+  subjects  Subject[]
+  quizeForums QuizeForm[]
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("teacher")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  email     String   @unique
+  hash      String
+  firstName String?
+  lastName  String?
+  teachers  Teacher[] 
+  university University?
+
+  @@map("user")
+}
+
+model Student {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  email     String   @unique
+  hash      String
+  firstName String?
+  lastName  String?
+  studentNumber String?
+  teacherSubjects StudentSubject[]
+
+  @@map("student")
+}
+
+model University {
+  id     Int    @id @default(autoincrement())
+  name   String
+  userId Int    @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("universitys")
+}
+
+model Subject {
+  id               Int             @id @default(autoincrement())
+  createdAt        DateTime        @default(now())
+  subject_name     String
+  course           String
+  term             String
+  numberOfStudent  Int
+  numberPassLecture Int
+  teacherId        Int
+  teacher          Teacher         @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  teacherUserSubject StudentSubject[]
+
+  @@map("subjects")
+}
+
+model StudentSubject {
+  studentId         Int
+  subjectId         Int
+  attendanceCount   Int        
+  reviewStatus      Boolean        
+  lastTimeScan      String        
+  student           Student       @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  subject           Subject       @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  @@id([studentId, subjectId])
+  @@map("user_subjects")
+}
+
+model QuizeForm {
+  id         Int     @id @default(autoincrement())
+  name       String
+  form       Json?
+  teacherId  Int
+  teacher    Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+
+  @@map("quize_form")
+}
